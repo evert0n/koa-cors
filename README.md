@@ -1,9 +1,9 @@
 koa-cors
 ========
 
-CORS middleware for koa
+CORS middleware for Koa
 
-Inspired by the great [node-cors](https://github.com/troygoode/node-cors) module
+Inspired by the great [node-cors](https://github.com/troygoode/node-cors) module.
 
 ## Installation (via [npm](https://npmjs.org/package/koa-cors))
 
@@ -46,6 +46,13 @@ Configures the **Access-Control-Allow-Credentials** CORS header. Set to `true` t
 Configures the **Access-Control-Allow-Max-Age** CORS header. Set to an integer to pass the header, otherwise it is omitted.
 
 For details on the effect of each CORS header, [read this article on HTML5 Rocks](http://www.html5rocks.com/en/tutorials/cors/).
+
+## Todo
+
+- Unit tests
+- Live demo
+- More examples
+- Enable CORS for a single route
 
 ## License
 
