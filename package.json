@@ -1,0 +1,24 @@
+{
+  "name": "koa-cors",
+  "version": "0.0.1",
+  "description": "CORS middleware for koa",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evert0n/koa-cors.git"
+  },
+  "keywords": [
+    "cors",
+    "koa",
+    "koajs"
+  ],
+  "author": "Everton Yoshitani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evert0n/koa-cors/issues"
+  },
+  "homepage": "https://github.com/evert0n/koa-cors"
+}
