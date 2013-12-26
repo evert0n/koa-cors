@@ -11,8 +11,6 @@ $ npm install koa-cors
 
 ## Usage
 
-### Simple Usage (Enable *All* CORS Requests)
-
 ```javascript
 var koa = require('koa');
 var route = require('koa-route');
