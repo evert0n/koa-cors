@@ -29,7 +29,9 @@ module.exports = function(settings) {
     /**
      * Access Control Allow Origin
      */
-    if (options.origin === true) {
+    if (options.origin === false) {
+      return;
+    } else if (options.origin === true) {
       options.origin = this.header.origin;
     } else if (!options.origin) {
       options.origin = '*';
