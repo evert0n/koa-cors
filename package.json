@@ -1,6 +1,6 @@
 {
   "name": "koa-cors",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CORS middleware for koa",
   "main": "index.js",
   "scripts": {
