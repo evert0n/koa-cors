@@ -1,7 +1,7 @@
 /**
  * CORS middleware
  *
- * @param {Object} [options]
+ * @param {Object} [settings]
  * @return {Function}
  * @api public
  */
@@ -16,6 +16,8 @@ module.exports = function(settings) {
 
   return function* cors(next) {
     
+    yield next;
+    
     var options = settings;
     
     if (typeof options === 'function') {
@@ -29,7 +31,9 @@ module.exports = function(settings) {
     /**
      * Access Control Allow Origin
      */
-    if (options.origin === true) {
+    if (options.origin === false) {
+      return;
+    } else if (options.origin === true) {
       options.origin = this.header.origin;
     } else if (!options.origin) {
       options.origin = '*';
@@ -77,8 +81,6 @@ module.exports = function(settings) {
     if (this.method === 'OPTIONS') {
       this.status = 204;
     }
-    
-    return yield next;
     
   }
   
