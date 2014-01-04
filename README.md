@@ -1,9 +1,9 @@
 koa-cors
 ========
 
-CORS middleware for koa
+CORS middleware for Koa
 
-Inspired by the great [node-cors](https://github.com/troygoode/node-cors) module
+Inspired by the great [node-cors](https://github.com/troygoode/node-cors) module.
 
 ## Installation (via [npm](https://npmjs.org/package/koa-cors))
 
@@ -31,7 +31,7 @@ app.listen(3000);
 ## Options
 
 ### origin
-Configures the **Access-Control-Allow-Origin** CORS header. Expects a string (ex: "http://example.com"). Set to `true` to reflect the [request origin](http://tools.ietf.org/html/draft-abarth-origin-09), as defined by `req.header('Origin')`. Set to `false` to disable CORS. Can also be set to a function, which takes the request origin as the first parameter and a callback (which expects the signature `err [object], allow [bool]`) as the second.
+Configures the **Access-Control-Allow-Origin** CORS header. Expects a string (ex: http://example.com). Set to `true` to reflect the [request origin](http://tools.ietf.org/html/draft-abarth-origin-09), as defined by `req.header('Origin')`. Set to `false` to disable CORS. Can also be set to a function, which takes the request as the first parameter.
 
 ### methods
 Configures the **Access-Control-Allow-Methods** CORS header. Expects a comma-delimited string (ex: 'GET,PUT,POST') or an array (ex: `['GET', 'PUT', 'POST']`).
@@ -46,6 +46,13 @@ Configures the **Access-Control-Allow-Credentials** CORS header. Set to `true` t
 Configures the **Access-Control-Allow-Max-Age** CORS header. Set to an integer to pass the header, otherwise it is omitted.
 
 For details on the effect of each CORS header, [read this article on HTML5 Rocks](http://www.html5rocks.com/en/tutorials/cors/).
+
+## Todo
+
+- Unit tests
+- Live demo
+- More examples
+- Enable CORS for a single route
 
 ## License
 

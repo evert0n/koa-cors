@@ -80,6 +80,7 @@ module.exports = function(settings) {
      */
     if (this.method === 'OPTIONS') {
       this.status = 204;
+      return;
     }
     
   }
