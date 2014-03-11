@@ -19,8 +19,8 @@ module.exports = function(settings) {
     yield next;
 
     var options = {
-      origin:      settings.origin,
-      methods:     settings.methods,
+      origin:      settings.origin || defaults.origin,
+      methods:     settings.methods || defaults.methods,
       credentials: settings.credentials,
       headers:     settings.headers,
       maxAge:      settings.maxAge
