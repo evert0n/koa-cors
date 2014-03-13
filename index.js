@@ -26,10 +26,6 @@ module.exports = function(settings) {
       maxAge:      settings.maxAge
     };
 
-    if (typeof options === 'function') {
-      options = options(this.request);
-    }
-
     if (typeof options.origin === 'function') {
       options.origin = options.origin(this.request);
     }
