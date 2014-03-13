@@ -39,6 +39,9 @@ Configures the **Access-Control-Allow-Methods** CORS header. Expects a comma-del
 ### headers
 Configures the **Access-Control-Allow-Headers** CORS header. Expects a comma-delimited string (ex: 'Content-Type,Authorization') or an array (ex: `['Content-Type', 'Authorization]`). If not specified, defaults to reflecting the headers specified in the request's **Access-Control-Request-Headers** header.
 
+### expose
+Configures the **Access-Control-Expose-Headers** CORS header. Expects a comma-delimited string (ex: 'WWW-Authenticate,Server-Authorization') or an array (ex: `['WWW-Authenticate', 'Server-Authorization]`). It is omitted by default.
+
 ### credentials
 Configures the **Access-Control-Allow-Credentials** CORS header. Set to `true` to pass the header, otherwise it is omitted.
 
