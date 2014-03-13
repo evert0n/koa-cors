@@ -23,6 +23,7 @@ module.exports = function(settings) {
       methods:     settings.methods || defaults.methods,
       credentials: settings.credentials,
       headers:     settings.headers,
+      expose:      settings.expose,
       maxAge:      settings.maxAge
     };
 
@@ -67,6 +68,18 @@ module.exports = function(settings) {
     }
     if (options.headers && options.headers.length) {
       this.set('Access-Control-Allow-Headers', options.headers);
+    }
+
+    /**
+     * Access Control Expose Headers
+     */
+    if (options.expose) {
+      if (options.expose.join) {
+        options.expose = options.expose.join(',');
+      }
+      if (options.expose.length) {
+        this.set('Access-Control-Expose-Headers', options.expose);
+      }
     }
 
     /**
