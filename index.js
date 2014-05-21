@@ -8,7 +8,11 @@
 module.exports = function(settings) {
 
   var defaults = {
-    origin: '*',
+    origin: function(req) {
+      // http://www.w3.org/TR/cors/#supports-credentials
+      // #3 "The string "*" cannot be used for a resource that supports credentials."
+      return req.header.origin || '*';
+    },
     methods: 'GET,HEAD,PUT,POST,DELETE'
   };
 
@@ -34,10 +38,8 @@ module.exports = function(settings) {
      */
     if (options.origin === false) {
       return;
-    } else if (options.origin === true) {
-      options.origin = this.header.origin || '*';
-    } else if (!options.origin) {
-      options.origin = '*';
+    } else if (!options.origin || options.origin === true) {
+      options.origin = defaults.origin;
     }
     this.set('Access-Control-Allow-Origin', options.origin);
 
