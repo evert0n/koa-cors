@@ -36,7 +36,7 @@ Configures the **Access-Control-Allow-Origin** CORS header. Expects a string (ex
 ### expose
 Configures the **Access-Control-Expose-Headers** CORS header. Expects a comma-delimited string (ex: 'WWW-Authenticate,Server-Authorization') or an array (ex: `['WWW-Authenticate', 'Server-Authorization]`). Set this to pass the header, otherwise it is omitted.
 
-### max age
+### maxAge
 Configures the **Access-Control-Max-Age** CORS header. Set to an integer to pass the header, otherwise it is omitted.
 
 ### credentials
