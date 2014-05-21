@@ -1,3 +1,8 @@
+/**
+ * Default options example
+ *
+ */
+
 var koa = require('koa');
 var route = require('koa-route');
 var cors = require('koa-cors');
