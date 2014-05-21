@@ -16,8 +16,6 @@ module.exports = function(settings) {
 
   return function* cors(next) {
 
-    yield next;
-
     var options = {
       origin:      settings.origin || defaults.origin,
       methods:     settings.methods || defaults.methods,
@@ -44,12 +42,24 @@ module.exports = function(settings) {
     this.set('Access-Control-Allow-Origin', options.origin);
 
     /**
-     * Access Control Allow Methods
+     * Access Control Expose Headers
      */
-    if (options.methods.join) {
-      options.methods = options.methods.join(',');
+    if (options.expose) {
+      if (options.expose.join) {
+        options.expose = options.expose.join(',');
+      }
+      if (options.expose.length) {
+        this.set('Access-Control-Expose-Headers', options.expose);
+      }
     }
-    this.set('Access-Control-Allow-Methods', options.methods);
+
+    /**
+     * Access Control Max Age
+     */
+    options.maxAge = options.maxAge && options.maxAge.toString();
+    if (options.maxAge && options.maxAge.length) {
+      this.set('Access-Control-Max-Age', options.maxAge);
+    }
 
     /**
      * Access Control Allow Credentials
@@ -57,6 +67,14 @@ module.exports = function(settings) {
     if (options.credentials === true) {
       this.set('Access-Control-Allow-Credentials', 'true');
     }
+
+    /**
+     * Access Control Allow Methods
+     */
+    if (options.methods.join) {
+      options.methods = options.methods.join(',');
+    }
+    this.set('Access-Control-Allow-Methods', options.methods);
 
     /**
      * Access Control Allow Headers
@@ -71,30 +89,12 @@ module.exports = function(settings) {
     }
 
     /**
-     * Access Control Expose Headers
-     */
-    if (options.expose) {
-      if (options.expose.join) {
-        options.expose = options.expose.join(',');
-      }
-      if (options.expose.length) {
-        this.set('Access-Control-Expose-Headers', options.expose);
-      }
-    }
-
-    /**
-     * Access Control Allow Max Age
-     */
-    options.maxAge = options.maxAge && options.maxAge.toString();
-    if (options.maxAge && options.maxAge.length) {
-      this.set('Access-Control-Allow-Max-Age', options.maxAge);
-    }
-
-    /**
      * Returns
      */
     if (this.method === 'OPTIONS') {
       this.status = 204;
+    } else {
+      yield next;
     }
 
   }
