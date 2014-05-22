@@ -31,10 +31,10 @@ describe('cors()', function() {
       });
   });
 
-  it('should not set "Access-Control-Allow-Expose"', function(done) {
+  it('should not set "Access-Control-Expose-Headers"', function(done) {
     superagent.get('http://localhost:3000')
       .end(function(response) {
-        chai.expect(response.get('Access-Control-Allow-Expose')).to.not.exist;
+        chai.expect(response.get('Access-Control-Expose-Headers')).to.not.exist;
 
         done();
       });
@@ -127,6 +127,42 @@ describe('cors({ origin: false })', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
         chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
+
+        done();
+      });
+  });
+
+});
+
+describe('cors({ expose: "Acccept,Authorization" })', function() {
+
+  beforeEach(function() {
+    setupServer({ expose: 'Accept,Authorization' });
+  });
+
+  it('should not set any "Access-Control-Allow-*" header', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Expose-Headers'))
+          .to.equal('Accept,Authorization');
+
+        done();
+      });
+  });
+
+});
+
+describe('cors({ expose: ["Acccept", "Authorization"] })', function() {
+
+  beforeEach(function() {
+    setupServer({ expose: ['Accept', 'Authorization'] });
+  });
+
+  it('should not set any "Access-Control-Allow-*" header', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Expose-Headers'))
+          .to.equal('Accept,Authorization');
 
         done();
       });
