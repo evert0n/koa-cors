@@ -1,22 +1,15 @@
 var koa        = require('koa');
+var http       = require('http');
 var chai       = require('chai');
 var cors       = require('../');
 var superagent = require('superagent');
 
-var app;
+var app, server;
 
 describe('cors()', function() {
 
-  before(function() {
-    app = koa();
-
-    app.use(cors());
-
-    app.use(function *(next) {
-      this.body = 'Hello';
-    });
-
-    app.listen(3000);
+  beforeEach(function() {
+    setupServer();
   });
 
   it('should set "Access-Control-Allow-Origin" to "*"', function(done) {
@@ -96,6 +89,63 @@ describe('cors()', function() {
 
 });
 
-describe('cors(options)', function() {
+describe('cors({ origin: true })', function() {
+
+  beforeEach(function() {
+    setupServer({ origin: true });
+  });
+
+  it('should set "Access-Control-Allow-Origin" to "*"', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('*');
+
+        done();
+      });
+  });
+
+  it('should set "Access-Control-Allow-Origin" to "example.org"', function(done) {
+    superagent.get('http://localhost:3000')
+      .set('Origin', 'example.org')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('example.org');
+
+        done();
+      });
+  });
 
 });
+
+describe('cors({ origin: false })', function() {
+
+  beforeEach(function() {
+    setupServer({ origin: false });
+  });
+
+  it('should not set any "Access-Control-Allow-*" header', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
+        chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
+
+        done();
+      });
+  });
+
+});
+
+afterEach(function() {
+  server.close();
+});
+
+function setupServer(options) {
+  app = koa();
+
+  app.use(cors(options));
+
+  app.use(function *(next) {
+    this.body = 'Hello';
+  });
+
+  server = http.createServer(app.callback()).listen(3000);
+}
