@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/evert0n/koa-cors/issues"
   },
-  "homepage": "https://github.com/evert0n/koa-cors"
+  "homepage": "https://github.com/evert0n/koa-cors",
+  "devDependencies": {
+    "koa": "^0.6.1",
+    "chai": "^1.9.1",
+    "mocha": "^1.19.0",
+    "superagent": "^0.18.0"
+  }
 }
