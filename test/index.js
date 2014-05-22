@@ -140,7 +140,7 @@ describe('cors({ expose: "Acccept,Authorization" })', function() {
     setupServer({ expose: 'Accept,Authorization' });
   });
 
-  it('should not set any "Access-Control-Allow-*" header', function(done) {
+  it('should set "Access-Control-Expose-Headers" header', function(done) {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Expose-Headers'))
@@ -158,11 +158,28 @@ describe('cors({ expose: ["Acccept", "Authorization"] })', function() {
     setupServer({ expose: ['Accept', 'Authorization'] });
   });
 
-  it('should not set any "Access-Control-Allow-*" header', function(done) {
+  it('should set "Access-Control-Expose-Headers" header', function(done) {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Expose-Headers'))
           .to.equal('Accept,Authorization');
+
+        done();
+      });
+  });
+
+});
+
+describe('cors({ maxAge: 60 * 24 })', function() {
+
+  beforeEach(function() {
+    setupServer({ maxAge: 60 * 24 });
+  });
+
+  it('should set "Access-Control-Max-Age" header', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Max-Age')).to.equal('1440');
 
         done();
       });
