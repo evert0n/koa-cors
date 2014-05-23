@@ -23,19 +23,18 @@ module.exports = function(settings) {
      */
     var options = settings || defaults;
 
-    if (typeof options.origin === 'function') {
-      options.origin = options.origin(this.request);
-    }
-
     /**
      * Access Control Allow Origin
      */
-    if (options.origin === false) {
-      return;
-    } else if (typeof options.origin === 'undefined' || options.origin === true) {
-      options.origin = defaults.origin(this.request);
+    if (options.origin === false) return;
+
+    var origin;
+    if (typeof options.origin === 'string') {
+      origin = options.origin;
+    } else {
+      origin = defaults.origin(this.request);
     }
-    this.set('Access-Control-Allow-Origin', options.origin);
+    this.set('Access-Control-Allow-Origin', origin);
 
     /**
      * Access Control Expose Headers
