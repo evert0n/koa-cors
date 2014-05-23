@@ -9,25 +9,19 @@ module.exports = function(settings) {
 
   var defaults = {
     origin: function(req) {
-      // http://www.w3.org/TR/cors/#supports-credentials
-      // #3 "The string "*" cannot be used for a resource that supports credentials."
       return req.header.origin || '*';
     },
     methods: 'GET,HEAD,PUT,POST,DELETE'
   };
 
-  settings = settings || defaults;
-
   return function* cors(next) {
 
-    var options = {
-      origin:      settings.origin || defaults.origin,
-      methods:     settings.methods || defaults.methods,
-      credentials: settings.credentials,
-      headers:     settings.headers,
-      expose:      settings.expose,
-      maxAge:      settings.maxAge
-    };
+    /**
+     * Set options
+     *
+     * @type {Object}
+     */
+    var options = settings || defaults;
 
     if (typeof options.origin === 'function') {
       options.origin = options.origin(this.request);
@@ -38,8 +32,8 @@ module.exports = function(settings) {
      */
     if (options.origin === false) {
       return;
-    } else if (!options.origin || options.origin === true) {
-      options.origin = defaults.origin;
+    } else if (typeof options.origin === 'undefined' || options.origin === true) {
+      options.origin = defaults.origin(this.request);
     }
     this.set('Access-Control-Allow-Origin', options.origin);
 
@@ -73,7 +67,9 @@ module.exports = function(settings) {
     /**
      * Access Control Allow Methods
      */
-    if (options.methods.join) {
+    if (typeof options.methods === 'undefined') {
+      options.methods = defaults.methods;
+    } else if (options.methods.join) {
       options.methods = options.methods.join(',');
     }
     this.set('Access-Control-Allow-Methods', options.methods);
