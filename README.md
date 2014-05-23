@@ -51,10 +51,6 @@ Configures the **Access-Control-Allow-Headers** CORS header. Expects a comma-del
 
 For details on the effect of each CORS header, [read this article on HTML5 Rocks](http://www.html5rocks.com/en/tutorials/cors/).
 
-## Todo
-
-- Unit tests
-- Live demo
 
 ## License
 
