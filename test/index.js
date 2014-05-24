@@ -31,6 +31,21 @@ describe('cors()', function() {
       });
   });
 
+  it('should update "Access-Control-Allow-Origin" for each request', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('*');
+
+        superagent.get('http://localhost:3000')
+          .set('Origin', 'localhost')
+          .end(function(response) {
+            chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
+
+            done();
+          });
+      });
+  });
+
   it('should not set "Access-Control-Expose-Headers"', function(done) {
     superagent.get('http://localhost:3000')
       .end(function(response) {
