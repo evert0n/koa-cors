@@ -6,7 +6,7 @@
  * @api public
  */
 module.exports = function(settings) {
-
+  "use strict";
   var defaults = {
     origin: function(req) {
       return req.header.origin || '*';
@@ -31,9 +31,13 @@ module.exports = function(settings) {
     var origin;
     if (typeof options.origin === 'string') {
       origin = options.origin;
+    } else if (typeof options.origin === 'function') {
+      origin = options.origin(this.request);
     } else {
       origin = defaults.origin(this.request);
     }
+
+    if (origin === false) return;
     this.set('Access-Control-Allow-Origin', origin);
 
     /**
@@ -94,6 +98,6 @@ module.exports = function(settings) {
       yield next;
     }
 
-  }
+  };
 
 };

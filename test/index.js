@@ -149,6 +149,55 @@ describe('cors({ origin: false })', function() {
 
 });
 
+describe('cors({ origin: [function]})', function() {
+
+  beforeEach(function() {
+    var originWhiteList = ["localhost", "otherhost.com"];
+
+    var originFunction = function(req) {
+      var origin = req.header.origin;
+      if (originWhiteList.indexOf(origin) !== -1) {
+        return origin;
+      }
+      return false;
+    }
+
+    setupServer({ origin: originFunction });
+  });
+
+  it('should not set any "Access-Control-Allow-*" header', function(done) {
+    superagent.get('http://localhost:3000')
+    .set('Origin', 'example.com')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
+        chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
+
+        done();
+      });
+  });
+
+  it('should set "Access-Control-Allow-Origin" to "otherhost.com"', function(done) {
+    superagent.get('http://localhost:3000')
+    .set('Origin', 'otherhost.com')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('otherhost.com');
+
+        done();
+      });
+  });
+
+  it('should set "Access-Control-Allow-Origin" to "localhost"', function(done) {
+    superagent.get('http://localhost:3000')
+    .set('Origin', 'localhost')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
+
+        done();
+      });
+  });
+
+});
+
 describe('cors({ expose: "Acccept,Authorization" })', function() {
 
   beforeEach(function() {
