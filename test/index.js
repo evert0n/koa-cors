@@ -153,6 +153,7 @@ describe('cors({ origin: function })', function() {
 
   beforeEach(function() {
     setupServer({ origin: function (req) {
+      if (req.header.origin && req.header.origin.match(/evil/i)) return false;
       if (req.header.origin) return 'foo';
       return 'bar';
     }});
@@ -174,6 +175,17 @@ describe('cors({ origin: function })', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.not.equal('example.org');
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('foo');
+
+        done();
+      });
+  });
+
+  it('should not set any "Access-Control-Allow-*" header', function(done) {
+    superagent.get('http://localhost:3000')
+      .set('Origin', 'https://evil.com')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
+        chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
 
         done();
       });
