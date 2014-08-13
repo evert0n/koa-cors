@@ -149,6 +149,38 @@ describe('cors({ origin: false })', function() {
 
 });
 
+describe('cors({ origin: function })', function() {
+
+  beforeEach(function() {
+    setupServer({ origin: function (req) {
+      if (req.header.origin) return 'foo';
+      return 'bar';
+    }});
+  });
+
+  it('should set "Access-Control-Allow-Origin" to "bar"', function(done) {
+    superagent.get('http://localhost:3000')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.not.equal('*');
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('bar');
+
+        done();
+      });
+  });
+
+  it('should set "Access-Control-Allow-Origin" to "foo"', function(done) {
+    superagent.get('http://localhost:3000')
+      .set('Origin', 'example.org')
+      .end(function(response) {
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.not.equal('example.org');
+        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('foo');
+
+        done();
+      });
+  });
+
+});
+
 describe('cors({ expose: "Acccept,Authorization" })', function() {
 
   beforeEach(function() {
