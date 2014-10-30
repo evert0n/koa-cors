@@ -32,7 +32,7 @@ module.exports = function(settings) {
     if (typeof options.origin === 'string') {
       origin = options.origin;
     } else {
-      origin = defaults.origin(this.request);
+      origin = (typeof options.origin === 'function') ? options.origin(this.request) : defaults.origin(this.request);
     }
     this.set('Access-Control-Allow-Origin', origin);
 
