@@ -29,6 +29,7 @@ module.exports = function(settings) {
     if (options.origin === false) return;
 
     var origin;
+
     if (typeof options.origin === 'string') {
       origin = options.origin;
     } else if (typeof options.origin === 'function') {
@@ -38,6 +39,7 @@ module.exports = function(settings) {
     }
 
     if (origin === false) return;
+
     this.set('Access-Control-Allow-Origin', origin);
 
     /**
