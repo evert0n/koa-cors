@@ -35,7 +35,7 @@ module.exports = function(settings) {
     } else if (typeof options.origin === 'function') {
       origin = options.origin(this.request);
     } else {
-      origin = defaults.origin(this.request);
+      origin = (typeof options.origin === 'function') ? options.origin(this.request) : defaults.origin(this.request);
     }
 
     if (origin === false) return;
