@@ -36,11 +36,11 @@ module.exports = function(settings) {
 
     var getOrigin = options.origin;
 
-    if (typeof getOrigin !== 'function' && typeof getOrigin !== 'string') {
-      getOrigin = defaults.origin(this.request);
-    }
-
     if (typeof getOrigin !== 'function') {
+      if (typeof getOrigin !== 'string') {
+        getOrigin = defaults.origin(this.request);
+      }
+
       getOrigin = (function(origin) {
         return function () { return origin; };
       }(getOrigin));
