@@ -1,3 +1,9 @@
+function yieldable(something) {
+  var yieldableTypes = ['function', 'object', 'array'],
+      type = typeof something;
+  return yieldableTypes.indexOf(type) >= 0;
+}
+
 /**
  * CORS middleware
  *
@@ -28,14 +34,22 @@ module.exports = function(settings) {
      */
     if (options.origin === false) return;
 
-    var origin;
+    var getOrigin = options.origin;
 
-    if (typeof options.origin === 'string') {
-      origin = options.origin;
-    } else if (typeof options.origin === 'function') {
-      origin = options.origin(this.request);
-    } else {
-      origin = defaults.origin(this.request);
+    if (typeof getOrigin !== 'function' && typeof getOrigin !== 'string') {
+      getOrigin = defaults.origin(this.request);
+    }
+
+    if (typeof getOrigin !== 'function') {
+      getOrigin = (function(origin) {
+        return function () { return origin; };
+      }(getOrigin));
+    }
+
+    var origin = getOrigin(this.request);
+
+    if (yieldable(origin)) {
+      origin = yield origin
     }
 
     if (origin === false) return;

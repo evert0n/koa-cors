@@ -3,6 +3,7 @@ var http       = require('http');
 var chai       = require('chai');
 var cors       = require('../');
 var superagent = require('superagent');
+var Promise    = require('bluebird');
 
 var app, server;
 
@@ -150,50 +151,80 @@ describe('cors({ origin: false })', function() {
 });
 
 describe('cors({ origin: [function]})', function() {
+  var originWhiteList = ["localhost", "otherhost.com"];
 
-  beforeEach(function() {
-    var originWhiteList = ["localhost", "otherhost.com"];
+  function testOriginAsFunction() {
+    it('should not set any "Access-Control-Allow-*" header', function(done) {
+      superagent.get('http://localhost:3000')
+      .set('Origin', 'example.com')
+        .end(function(response) {
+          chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
+          chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
 
-    var originFunction = function(req) {
-      var origin = req.header.origin;
-      if (originWhiteList.indexOf(origin) !== -1) {
-        return origin;
+          done();
+        });
+    });
+
+    it('should set "Access-Control-Allow-Origin" to "otherhost.com"', function(done) {
+      superagent.get('http://localhost:3000')
+      .set('Origin', 'otherhost.com')
+        .end(function(response) {
+          chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('otherhost.com');
+
+          done();
+        });
+    });
+
+    it('should set "Access-Control-Allow-Origin" to "localhost"', function(done) {
+      superagent.get('http://localhost:3000')
+      .set('Origin', 'localhost')
+        .end(function(response) {
+          chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
+
+          done();
+        });
+    });
+  }
+
+  describe('synchronous', function() {
+
+    beforeEach(function() {
+      var originFunction = function(req) {
+        var origin = req.header.origin;
+        if (originWhiteList.indexOf(origin) !== -1) {
+          return origin;
+        }
+        return false;
       }
-      return false;
-    }
 
-    setupServer({ origin: originFunction });
+      setupServer({ origin: originFunction });
+    });
+
+    testOriginAsFunction();
+
   });
 
-  it('should not set any "Access-Control-Allow-*" header', function(done) {
-    superagent.get('http://localhost:3000')
-    .set('Origin', 'example.com')
-      .end(function(response) {
-        chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
-        chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
+  describe('asynchronous', function() {
 
-        done();
-      });
-  });
+    beforeEach(function() {
+      var originFunction = function(req) {
+        return new Promise(function(resolve) {
+          setTimeout(function() {
+            var origin = req.header.origin;
+            if (originWhiteList.indexOf(origin) !== -1) {
+              resolve(origin);
+            } else {
+              resolve(false);
+            }
+          }, 20);
+        });
+      };
 
-  it('should set "Access-Control-Allow-Origin" to "otherhost.com"', function(done) {
-    superagent.get('http://localhost:3000')
-    .set('Origin', 'otherhost.com')
-      .end(function(response) {
-        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('otherhost.com');
+      setupServer({ origin: originFunction });
+    });
 
-        done();
-      });
-  });
+    testOriginAsFunction();
 
-  it('should set "Access-Control-Allow-Origin" to "localhost"', function(done) {
-    superagent.get('http://localhost:3000')
-    .set('Origin', 'localhost')
-      .end(function(response) {
-        chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
-
-        done();
-      });
   });
 
 });
