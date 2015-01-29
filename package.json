@@ -4,7 +4,7 @@
   "description": "CORS middleware for Koa",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "koa": "^0.6.1",
     "chai": "^1.9.1",
-    "mocha": "^1.19.0",
+    "mocha": "^2.1.0",
     "superagent": "^0.18.0"
   }
 }

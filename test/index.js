@@ -16,7 +16,8 @@ describe('cors()', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('*');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -26,7 +27,8 @@ describe('cors()', function() {
       .set('Origin', 'example.org')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('example.org');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -40,7 +42,8 @@ describe('cors()', function() {
           .set('Origin', 'localhost')
           .end(function(response) {
             chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
-
+            chai.expect(response.statusCode).equal(200);
+            chai.expect(response.text).equal('Hello');
             done();
           });
       });
@@ -50,7 +53,8 @@ describe('cors()', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Expose-Headers')).to.not.exist;
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -59,7 +63,8 @@ describe('cors()', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Max-Age')).to.not.exist;
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -68,7 +73,8 @@ describe('cors()', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Methods')).to.equal('GET,HEAD,PUT,POST,DELETE');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -77,7 +83,8 @@ describe('cors()', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Credentials')).to.not.exist;
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -87,7 +94,8 @@ describe('cors()', function() {
       .set('Access-Control-Request-Headers', 'Accept')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Headers')).to.equal('Accept');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -97,7 +105,8 @@ describe('cors()', function() {
       .set('Access-Control-Request-Headers', 'X-Foo')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Headers')).to.equal('X-Foo');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -114,7 +123,8 @@ describe('cors({ origin: true })', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('*');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -124,7 +134,8 @@ describe('cors({ origin: true })', function() {
       .set('Origin', 'example.org')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('example.org');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -140,9 +151,10 @@ describe('cors({ origin: false })', function() {
   it('should not set any "Access-Control-Allow-*" header', function(done) {
     superagent.get('http://localhost:3000')
       .end(function(response) {
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
         chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
-
         done();
       });
   });
@@ -171,7 +183,8 @@ describe('cors({ origin: [function]})', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
         chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -181,7 +194,8 @@ describe('cors({ origin: [function]})', function() {
     .set('Origin', 'otherhost.com')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('otherhost.com');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -191,7 +205,8 @@ describe('cors({ origin: [function]})', function() {
     .set('Origin', 'localhost')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -209,7 +224,8 @@ describe('cors({ expose: "Acccept,Authorization" })', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Expose-Headers'))
           .to.equal('Accept,Authorization');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -227,7 +243,8 @@ describe('cors({ expose: ["Acccept", "Authorization"] })', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Expose-Headers'))
           .to.equal('Accept,Authorization');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
@@ -244,7 +261,8 @@ describe('cors({ maxAge: 60 * 24 })', function() {
     superagent.get('http://localhost:3000')
       .end(function(response) {
         chai.expect(response.get('Access-Control-Max-Age')).to.equal('1440');
-
+        chai.expect(response.statusCode).equal(200);
+        chai.expect(response.text).equal('Hello');
         done();
       });
   });
