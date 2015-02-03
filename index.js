@@ -40,6 +40,10 @@ module.exports = function(settings) {
 
     if (origin === false) return;
 
+    if ((origin !== '*') && (typeof options.origin !== 'string')) {
+      this.set('Vary', [this.response.get('Vary'), 'Origin'].filter(function(element) {return element;}).join(', '));
+    }
+
     this.set('Access-Control-Allow-Origin', origin);
 
     /**
