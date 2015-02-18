@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * CORS middleware
  *
@@ -6,7 +8,6 @@
  * @api public
  */
 module.exports = function(settings) {
-  "use strict";
   var defaults = {
     origin: function(req) {
       return req.header.origin || '*';
