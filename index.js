@@ -82,13 +82,14 @@ module.exports = function(settings) {
     /**
      * Access Control Allow Headers
      */
+    var headers;
     if (!options.headers) {
-      options.headers = this.header['access-control-request-headers'];
+      headers = this.header['access-control-request-headers'];
     } else if (options.headers.join) {
-      options.headers = options.headers.join(',');
+      headers = options.headers = options.headers.join(',');
     }
-    if (options.headers && options.headers.length) {
-      this.set('Access-Control-Allow-Headers', options.headers);
+    if (headers && headers.length) {
+      this.set('Access-Control-Allow-Headers', headers);
     }
 
     /**
