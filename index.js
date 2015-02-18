@@ -3,40 +3,62 @@
 /**
  * CORS middleware
  *
- * @param {Object} [settings]
- * @return {Function}
+ * @param {Object} [options]
+ * @return {GeneratorFunction}
  * @api public
  */
-module.exports = function(settings) {
+module.exports = function getMiddleware(options) {
+  options = options || {};
+
   var defaults = {
-    origin: function(req) {
-      return req.header.origin || '*';
-    },
+    origin: true,
     methods: 'GET,HEAD,PUT,POST,DELETE'
   };
 
+  // Set defaults
+  for (var key in defaults) {
+    if (!options.hasOwnProperty(key)) {
+      options[key] = defaults[key];
+    }
+  }
+
+  // Set expose
+  if (Array.isArray(options.expose)) {
+    options.expose = options.expose.join(',');
+  }
+
+  // Set maxAge
+  if (typeof options.maxAge === 'number') {
+    options.maxAge = options.maxAge.toString();
+  } else {
+    options.maxAge = null;
+  }
+
+  // Set methods
+  if (Array.isArray(options.methods)) {
+    options.methods = options.methods.join(',');
+  }
+
+  // Set headers
+  if (Array.isArray(options.headers)) {
+    options.headers = options.headers.join(',');
+  }
+
   return function* cors(next) {
-
-    /**
-     * Set options
-     *
-     * @type {Object}
-     */
-    var options = settings || defaults;
-
     /**
      * Access Control Allow Origin
      */
-    if (options.origin === false) return;
 
     var origin;
 
     if (typeof options.origin === 'string') {
       origin = options.origin;
+    } else if (options.origin === true) {
+      origin = this.get('origin') || '*';
+    } else if (options.origin === false) {
+      origin = options.origin;
     } else if (typeof options.origin === 'function') {
       origin = options.origin(this.request);
-    } else {
-      origin = defaults.origin(this.request);
     }
 
     if (origin === false) return;
@@ -47,19 +69,13 @@ module.exports = function(settings) {
      * Access Control Expose Headers
      */
     if (options.expose) {
-      if (options.expose.join) {
-        options.expose = options.expose.join(',');
-      }
-      if (options.expose.length) {
-        this.set('Access-Control-Expose-Headers', options.expose);
-      }
+      this.set('Access-Control-Expose-Headers', options.expose);
     }
 
     /**
      * Access Control Max Age
      */
-    options.maxAge = options.maxAge && options.maxAge.toString();
-    if (options.maxAge && options.maxAge.length) {
+    if (options.maxAge) {
       this.set('Access-Control-Max-Age', options.maxAge);
     }
 
@@ -73,23 +89,20 @@ module.exports = function(settings) {
     /**
      * Access Control Allow Methods
      */
-    if (typeof options.methods === 'undefined') {
-      options.methods = defaults.methods;
-    } else if (options.methods.join) {
-      options.methods = options.methods.join(',');
-    }
     this.set('Access-Control-Allow-Methods', options.methods);
 
     /**
      * Access Control Allow Headers
      */
     var headers;
-    if (!options.headers) {
-      headers = this.header['access-control-request-headers'];
-    } else if (options.headers.join) {
-      headers = options.headers = options.headers.join(',');
+
+    if (options.headers) {
+      headers = options.headers;
+    } else {
+      headers = this.get('access-control-request-headers');
     }
-    if (headers && headers.length) {
+
+    if (headers) {
       this.set('Access-Control-Allow-Headers', headers);
     }
 
@@ -101,7 +114,5 @@ module.exports = function(settings) {
     } else {
       yield next;
     }
-
   };
-
 };
