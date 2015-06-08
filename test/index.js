@@ -102,6 +102,20 @@ describe('cors()', function() {
       });
   });
 
+  it('should not fix value of "Access-Control-Allow-Headers"', function(done) {
+    superagent.get('http://localhost:3000')
+      .set('Access-Control-Request-Headers', 'X-Foo')
+      .end(function() {
+        superagent.get('http://localhost:3000')
+          .set('Access-Control-Request-Headers', 'X-Bar')
+          .end(function(response) {
+            chai.expect(response.get('Access-Control-Allow-Headers')).to.equal('X-Bar');
+
+            done();
+          });
+      });
+  });
+
 });
 
 describe('cors({ origin: true })', function() {
