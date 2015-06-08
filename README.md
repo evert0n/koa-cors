@@ -77,6 +77,3 @@ For details on the effect of each CORS header,
 
 [MIT License](http://www.opensource.org/licenses/mit-license.php)
 
-## Author
-
-[Everton Yoshitani](https://github.com/evert0n) ([everton@notreve.com](mailto:everton@notreve.com))

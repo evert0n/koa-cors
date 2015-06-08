@@ -8,6 +8,7 @@
  * @api public
  */
 module.exports = function getMiddleware(options) {
+  
   options = options || {};
 
   var defaults = {
