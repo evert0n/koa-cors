@@ -45,10 +45,10 @@ module.exports = function getMiddleware(options) {
   }
 
   return function* cors(next) {
+    
     /**
      * Access Control Allow Origin
      */
-
     var origin;
 
     if (typeof options.origin === 'string') {

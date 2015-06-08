@@ -4,7 +4,7 @@
   "description": "CORS middleware for Koa",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha --harmony test"
   },
   "repository": {
     "type": "git",
