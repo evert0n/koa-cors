@@ -9,8 +9,8 @@ var cors = require('koa-cors');
 var app = koa();
 
 var options = {
-	origin: '*';
-}
+	origin: '*'
+};
 
 app.use(cors(options));
 
