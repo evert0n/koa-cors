@@ -64,7 +64,7 @@ comma-delimited string (ex: 'GET,PUT,POST') or an array (ex: `['GET', 'PUT',
 ### headers
 Configures the **Access-Control-Allow-Headers** CORS header. Expects a
 comma-delimited string (ex: 'Content-Type,Authorization') or an array (ex:
-`['Content-Type', 'Authorization]`). If not specified, defaults to reflecting
+`['Content-Type', 'Authorization']`). If not specified, defaults to reflecting
 the headers specified in the request's **Access-Control-Request-Headers**
 header.
 
