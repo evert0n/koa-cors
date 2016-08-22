@@ -42,7 +42,7 @@ function, which takes the request as the first parameter.
 
 Configures the **Access-Control-Expose-Headers** CORS header. Expects a
 comma-delimited string (ex: 'WWW-Authenticate,Server-Authorization') or an array
-(ex: `['WWW-Authenticate', 'Server-Authorization]`). Set this to pass the
+(ex: `['WWW-Authenticate', 'Server-Authorization']`). Set this to pass the
 header, otherwise it is omitted.
 
 ### maxAge
