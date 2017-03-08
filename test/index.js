@@ -143,6 +143,15 @@ describe('cors({ origin: true })', function() {
       });
   });
 
+  it('should set "Vary" to "Origin"', function(done) {
+    superagent.get('http://localhost:3000')
+      .set('Origin', 'example.org')
+      .end(function(response) {
+        chai.expect(response.get('Vary')).to.equal('Origin');
+        done();
+      });
+  });
+
 });
 
 describe('cors({ origin: false })', function() {
@@ -206,6 +215,15 @@ describe('cors({ origin: [function]})', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.equal('localhost');
 
+        done();
+      });
+  });
+
+  it('should set "Vary" to "Origin"', function(done) {
+    superagent.get('http://localhost:3000')
+      .set('Origin', 'otherhost.com')
+      .end(function(response) {
+        chai.expect(response.get('Vary')).to.equal('Origin');
         done();
       });
   });
