@@ -62,7 +62,10 @@ module.exports = function getMiddleware(options) {
       origin = options.origin(this.request);
     }
 
-    if (origin === false) return;
+    if (origin === false) {
+       yield next; 
+       return ;
+    }
 
     this.set('Access-Control-Allow-Origin', origin);
 

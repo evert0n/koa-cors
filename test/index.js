@@ -185,7 +185,7 @@ describe('cors({ origin: [function]})', function() {
       .end(function(response) {
         chai.expect(response.get('Access-Control-Allow-Origin')).to.not.exist;
         chai.expect(response.get('Access-Control-Allow-Methods')).to.not.exist;
-
+        chai.expect(response.statusCode).to.equal(200);
         done();
       });
   });
