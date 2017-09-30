@@ -45,7 +45,7 @@ module.exports = function getMiddleware(options) {
     options.headers = options.headers.join(',');
   }
 
-  return function* cors(next) {
+  return async function cors(ctx, next) {
     
     /**
      * Access Control Allow Origin
@@ -55,45 +55,44 @@ module.exports = function getMiddleware(options) {
     if (typeof options.origin === 'string') {
       origin = options.origin;
     } else if (options.origin === true) {
-      origin = this.get('origin') || '*';
+      origin = ctx.get('origin') || '*';
     } else if (options.origin === false) {
       origin = options.origin;
     } else if (typeof options.origin === 'function') {
-      origin = options.origin(this.request);
+      origin = options.origin(ctx.request);
     }
 
     if (origin === false) {
-       yield next; 
-       return ;
+       return await next();
     }
 
-    this.set('Access-Control-Allow-Origin', origin);
+    ctx.set('Access-Control-Allow-Origin', origin);
 
     /**
      * Access Control Expose Headers
      */
     if (options.expose) {
-      this.set('Access-Control-Expose-Headers', options.expose);
+      ctx.set('Access-Control-Expose-Headers', options.expose);
     }
 
     /**
      * Access Control Max Age
      */
     if (options.maxAge) {
-      this.set('Access-Control-Max-Age', options.maxAge);
+      ctx.set('Access-Control-Max-Age', options.maxAge);
     }
 
     /**
      * Access Control Allow Credentials
      */
     if (options.credentials === true) {
-      this.set('Access-Control-Allow-Credentials', 'true');
+      ctx.set('Access-Control-Allow-Credentials', 'true');
     }
 
     /**
      * Access Control Allow Methods
      */
-    this.set('Access-Control-Allow-Methods', options.methods);
+    ctx.set('Access-Control-Allow-Methods', options.methods);
 
     /**
      * Access Control Allow Headers
@@ -103,20 +102,20 @@ module.exports = function getMiddleware(options) {
     if (options.headers) {
       headers = options.headers;
     } else {
-      headers = this.get('access-control-request-headers');
+      headers = ctx.get('access-control-request-headers');
     }
 
     if (headers) {
-      this.set('Access-Control-Allow-Headers', headers);
+      ctx.set('Access-Control-Allow-Headers', headers);
     }
 
     /**
      * Returns
      */
-    if (this.method === 'OPTIONS') {
-      this.status = 204;
+    if (ctx.method === 'OPTIONS') {
+      ctx.status = 204;
     } else {
-      yield next;
+      return await next();
     }
   };
 };
