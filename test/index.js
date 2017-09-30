@@ -1,4 +1,4 @@
-var koa        = require('koa');
+var Koa        = require('koa');
 var http       = require('http');
 var chai       = require('chai');
 var cors       = require('../');
@@ -270,12 +270,12 @@ afterEach(function() {
 });
 
 function setupServer(options) {
-  app = koa();
+  app = new Koa();
 
   app.use(cors(options));
 
-  app.use(function *(next) {
-    this.body = 'Hello';
+  app.use(function(ctx) {
+    ctx.body = 'Hello';
   });
 
   server = http.createServer(app.callback()).listen(3000);
